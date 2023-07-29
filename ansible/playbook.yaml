@@ -10,13 +10,16 @@
       - python
       - erlang
       - elixir
-      - clojure
       - rust
 
   tasks:
     - name: Install yay
       ansible.builtin.include_tasks:
         file: tasks/yay.yaml
+
+    - name: Install unzip
+      command: "yay -S --noconfirm unzip"
+      become_user: "{{ user }}"
 
     - name: Install Docker
       ansible.builtin.include_tasks:
@@ -29,3 +32,23 @@
     - name: Install asdf and langs
       ansible.builtin.include_tasks:
         file: tasks/asdf.yaml
+
+    - name: Install Kubernetes
+      ansible.builtin.include_tasks:
+        file: tasks/kunernetes.yaml
+
+    - name: Install Terraform
+      command: "yay -S --noconfirm terraform"
+      become_user: "{{ user }}"
+
+    - name: Install Bat
+      command: "yay -S --noconfirm bat"
+      become_user: "{{ user }}"
+    
+    - name: Install Exa
+      command: "yay -S --noconfirm exa"
+      become_user: "{{ user }}"
+
+    - name: Install Github CLI
+      command: "yay -S --noconfirm github-cli"
+      become_user: "{{ user }}"

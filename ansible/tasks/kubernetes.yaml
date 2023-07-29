@@ -1,0 +1,7 @@
+- name: Install kubectl
+  command: "yay -S --noconfirm kubeclt"
+  become_user: "{{ user }}"
+
+- name: Install kubeadm
+  command: "yay -S --noconfirm kubeadm"
+  become_user: "{{ user }}"
