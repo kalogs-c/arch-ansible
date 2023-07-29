@@ -1,0 +1,39 @@
+- name: Install neovim
+  package:
+    name: neovim
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
+  when: ansible_pkg_mgr == 'pacman'
+
+- name: Install ripgrep for Telescope
+  package:
+    name: ripgrep
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
+  when: ansible_pkg_mgr == 'pacman'
+
+- name: Clone NvChad
+  git:
+    repo: https://github.com/NvChad/NvChad
+    dest: /home/{{ user }}//.config/nvim
+    clone: yes
+    update: yes
+    depth: 1
+  become_user: "{{ user }}"
+
+- name: Import my neovim config
+  git:
+    repo: https://github.com/kalogs-c/dotfiles
+    dest: /tmp/nvimconfig
+    clone: yes
+    update: yes
+    depth: 1
+  register: config_clone
+  become_user: "{{ user }}"
+
+- name: Install neovim config
+  command: "mv /tmp/nvimconfig/custom /home/{{ user }}/.config/nvim/lua"
+  when: config_clone['changed']
+  become_user: "{{ user }}"

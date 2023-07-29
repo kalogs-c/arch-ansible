@@ -5,12 +5,11 @@
   vars:
     user: "carlinhos"
     asdf_plugins: 
-      - nodejs
       - golang
       - python
       - erlang
-      - elixir
       - rust
+      - ruby
 
   tasks:
     - name: Install yay
@@ -35,7 +34,7 @@
 
     - name: Install Kubernetes
       ansible.builtin.include_tasks:
-        file: tasks/kunernetes.yaml
+        file: tasks/kubernetes.yaml
 
     - name: Install Terraform
       command: "yay -S --noconfirm terraform"
@@ -51,4 +50,12 @@
 
     - name: Install Github CLI
       command: "yay -S --noconfirm github-cli"
+      become_user: "{{ user }}"
+
+    - name: Install Neovim
+      ansible.builtin.include_tasks:
+        file: tasks/neovim.yaml
+
+    - name: Install GCloud CLI
+      command: "yay -S --noconfirm google-cloud-cli"
       become_user: "{{ user }}"

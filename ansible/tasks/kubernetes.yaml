@@ -1,7 +1,9 @@
 - name: Install kubectl
   command: "yay -S --noconfirm kubeclt"
   become_user: "{{ user }}"
+  register: k8s
 
 - name: Install kubeadm
   command: "yay -S --noconfirm kubeadm"
   become_user: "{{ user }}"
+  when: k8s['changed']
