@@ -4,6 +4,7 @@
     state: present
   vars:
     ansible_pkg_mgr_skip: yes
+  register: nvim
   when: ansible_pkg_mgr == 'pacman'
 
 - name: Install ripgrep for Telescope
@@ -22,6 +23,8 @@
     update: yes
     depth: 1
   become_user: "{{ user }}"
+  register: nvchad
+  when: nvim['changed']
 
 - name: Import my neovim config
   git:
@@ -32,6 +35,7 @@
     depth: 1
   register: config_clone
   become_user: "{{ user }}"
+  when: nvchad['changed']
 
 - name: Install neovim config
   command: "mv /tmp/nvimconfig/custom /home/{{ user }}/.config/nvim/lua"

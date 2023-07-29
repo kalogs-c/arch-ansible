@@ -17,8 +17,12 @@
         file: tasks/yay.yaml
 
     - name: Install unzip
-      command: "yay -S --noconfirm unzip"
-      become_user: "{{ user }}"
+      package:
+        name: unzip
+        state: present
+      vars:
+        ansible_pkg_mgr_skip: yes
+      when: ansible_pkg_mgr == 'pacman'
 
     - name: Install Docker
       ansible.builtin.include_tasks:
@@ -37,20 +41,36 @@
         file: tasks/kubernetes.yaml
 
     - name: Install Terraform
-      command: "yay -S --noconfirm terraform"
-      become_user: "{{ user }}"
+      package:
+        name: terraform
+        state: present
+      vars:
+        ansible_pkg_mgr_skip: yes
+      when: ansible_pkg_mgr == 'pacman'
 
     - name: Install Bat
-      command: "yay -S --noconfirm bat"
-      become_user: "{{ user }}"
+      package:
+        name: bat
+        state: present
+      vars:
+        ansible_pkg_mgr_skip: yes
+      when: ansible_pkg_mgr == 'pacman'
     
     - name: Install Exa
-      command: "yay -S --noconfirm exa"
-      become_user: "{{ user }}"
+      package:
+        name: exa
+        state: present
+      vars:
+        ansible_pkg_mgr_skip: yes
+      when: ansible_pkg_mgr == 'pacman'
 
     - name: Install Github CLI
-      command: "yay -S --noconfirm github-cli"
-      become_user: "{{ user }}"
+      package:
+        name: github-cli
+        state: present
+      vars:
+        ansible_pkg_mgr_skip: yes
+      when: ansible_pkg_mgr == 'pacman'
 
     - name: Install Neovim
       ansible.builtin.include_tasks:

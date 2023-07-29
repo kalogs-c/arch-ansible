@@ -1,9 +1,16 @@
 - name: Install kubectl
-  command: "yay -S --noconfirm kubeclt"
-  become_user: "{{ user }}"
+  package:
+    name: kubectl
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
   register: k8s
+  when: ansible_pkg_mgr == 'pacman'
 
 - name: Install kubeadm
-  command: "yay -S --noconfirm kubeadm"
-  become_user: "{{ user }}"
-  when: k8s['changed']
+  package:
+    name: kubeadm
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
+  when: ansible_pkg_mgr == 'pacman' and k8s['changed']
