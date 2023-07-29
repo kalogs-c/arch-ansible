@@ -1,0 +1,25 @@
+- name: Install asdf
+  command: "yay -S --noconfirm asdf-vm"
+  become_user: "{{ user }}"
+  register: install_asdf
+  when: install_yay['changed'] and install_zsh['changed']
+
+- name: Install asdf plugin
+  become: true
+  command: /opt/asdf-vm/bin/asdf plugin add {{ item }} 
+  loop: "{{ asdf_plugins }}"
+  register: plugin_installed
+  when: install_asdf['changed']
+
+- name: Install the latest version of the language
+  become: true
+  command: /opt/asdf-vm/bin/asdf install {{ item }} latest
+  loop: "{{ asdf_plugins }}"
+  register: lang_installed
+  when: plugin_installed['changed']
+
+- name: Set the global version of the language
+  become: true
+  command: /opt/asdf-vm/bin/asdf global {{ item }} latest
+  loop: "{{ asdf_plugins }}"
+  when: lang_installed['changed']

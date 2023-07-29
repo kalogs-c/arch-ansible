@@ -13,11 +13,35 @@
 
 - name: Clone zsh-autosuggestions repo
   git:
-    repo: git clone https://github.com/zsh-users/zsh-autosuggestions
+    repo: https://github.com/zsh-users/zsh-autosuggestions
     dest: /home/{{ user }}/.zsh/zsh-autosuggestions
     clone: yes
     update: yes
   when: install_zsh['changed']
+
+- name: Install starship
+  package:
+    name: starship
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
+  when: ansible_pkg_mgr == 'pacman' and install_zsh['changed']
+
+- name: Install wget
+  package:
+    name: wget
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
+  when: ansible_pkg_mgr == 'pacman' and install_zsh['changed']
+
+- name: Install curl
+  package:
+    name: curl
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
+  when: ansible_pkg_mgr == 'pacman' and install_zsh['changed']
 
 - name: Import my zsh setting
   command: 

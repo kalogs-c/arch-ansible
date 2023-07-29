@@ -1,0 +1,31 @@
+- name: Install Arch WSL2 Setup
+  hosts: localhost
+  gather_facts: true
+  become: yes
+  vars:
+    user: "carlinhos"
+    asdf_plugins: 
+      - nodejs
+      - golang
+      - python
+      - erlang
+      - elixir
+      - clojure
+      - rust
+
+  tasks:
+    - name: Install yay
+      ansible.builtin.include_tasks:
+        file: tasks/yay.yaml
+
+    - name: Install Docker
+      ansible.builtin.include_tasks:
+        file: tasks/docker.yaml
+
+    - name: Install ZSH
+      ansible.builtin.include_tasks:
+        file: tasks/zsh.yaml
+
+    - name: Install asdf and langs
+      ansible.builtin.include_tasks:
+        file: tasks/asdf.yaml
