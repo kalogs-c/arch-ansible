@@ -9,3 +9,7 @@
     - name: Install yay
       ansible.builtin.include_tasks:
         file: yay.yaml
+
+    - name: Install Docker
+      ansible.builtin.include_tasks:
+        file: docker.yaml

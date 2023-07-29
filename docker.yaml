@@ -1,0 +1,21 @@
+- name: Install Docker
+  package:
+    name:
+      - docker
+      - docker-compose
+    state: present
+  when: ansible_pkg_mgr == 'pacman'
+
+- name: Enable and start the Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+  when: ansible_pkg_mgr == 'pacman'
+
+- name: Add user to the docker group
+  user:
+    name: "{{ user }}"
+    groups: docker
+    append: yes
+  become_user: root
