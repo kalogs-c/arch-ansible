@@ -1,0 +1,28 @@
+- name: Install Zsh package
+  package:
+    name: zsh
+    state: present
+  when: ansible_pkg_mgr == 'pacman'
+  register: install_zsh
+
+- name: Set Zsh as the default shell for the user
+  user:
+    name: "{{ user }}"
+    shell: /usr/bin/zsh
+  when: install_zsh['changed']
+
+- name: Clone zsh-autosuggestions repo
+  git:
+    repo: git clone https://github.com/zsh-users/zsh-autosuggestions
+    dest: /home/{{ user }}/.zsh/zsh-autosuggestions
+    clone: yes
+    update: yes
+  when: install_zsh['changed']
+
+- name: Import my zsh setting
+  command: 
+    chdir: "/home/{{ user }}/"
+    cmd: "wget https://raw.githubusercontent.com/kalogs-c/dotfiles/main/.zshrc" 
+    creates: /home/{{ user }}/.zshrc
+  when: install_zsh['changed']
+  become_user: "{{ user }}"
