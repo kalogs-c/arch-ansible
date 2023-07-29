@@ -1,0 +1,11 @@
+- name: Install Arch WSL2 Setup
+  hosts: localhost
+  gather_facts: true
+  become: yes
+  vars:
+    user: "carlinhos"
+
+  tasks:
+    - name: Install yay
+      ansible.builtin.include_tasks:
+        file: yay.yaml

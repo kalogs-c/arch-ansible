@@ -1,0 +1,48 @@
+- name: Install git
+  package:
+    name: git
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
+  when: ansible_pkg_mgr == 'pacman'
+  register: yay_deps
+
+- name: Install base devel
+  package:
+    name: base-devel
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
+  when: ansible_pkg_mgr == 'pacman'
+  register: yay_deps
+
+- name: Clone yay repo
+  git:
+    repo: https://aur.archlinux.org/yay.git
+    dest: /tmp/yay
+    clone: yes
+    update: yes
+  register: yay_clone
+  when: yay_deps['changed']
+
+- name: Change ownership of /tmp/yay to the regular user
+  file:
+    path: "/tmp/yay"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    recurse: yes
+    state: directory
+  when: yay_clone['changed']
+
+- name: YAY Makepkg
+  command: 
+    chdir: "/tmp/yay"
+    cmd: "makepkg -sfi --noconfirm"
+    creates: /usr/bin/yay
+  become_user: "{{ user }}"
+  register: install_yay
+  when: yay_clone['changed']
+
+- name: Update all using yay
+  command: "yay -Syyuu --noconfirm"
+  when: install_yay['changed']
