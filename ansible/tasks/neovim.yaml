@@ -15,6 +15,14 @@
     ansible_pkg_mgr_skip: yes
   when: ansible_pkg_mgr == 'pacman'
 
+- name: Install xclip
+  package:
+    name: xclip
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
+  when: ansible_pkg_mgr == 'pacman'
+
 - name: Clone NvChad
   git:
     repo: https://github.com/NvChad/NvChad
