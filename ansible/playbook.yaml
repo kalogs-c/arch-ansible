@@ -79,3 +79,7 @@
     - name: Install GCloud CLI
       command: "yay -S --noconfirm google-cloud-cli"
       become_user: "{{ user }}"
+
+    - name: Install Tmux
+      ansible.builtin.include_tasks:
+        file: tasks/tmux.yaml

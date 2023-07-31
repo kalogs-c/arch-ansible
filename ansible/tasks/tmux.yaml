@@ -1,0 +1,22 @@
+- name: Install tmux
+  package:
+    name: tmux
+    state: present
+  vars:
+    ansible_pkg_mgr_skip: yes
+  register: install_tmux
+  when: ansible_pkg_mgr == 'pacman' and install_zsh['changed']
+
+- name: Install tpm
+  command: "yay -S --noconfirm tmux-plugin-manager"
+  register: install_tpm
+  become_user: "{{ user }}"
+  when: ansible_pkg_mgr == 'pacman' and install_tmux['changed']
+
+- name: Install my tmux setting
+  command: 
+    chdir: "/home/{{ user }}/"
+    cmd: "wget https://raw.githubusercontent.com/kalogs-c/dotfiles/main/.tmux.conf" 
+    creates: /home/{{ user }}/.tmux.conf
+  become_user: "{{ user }}"
+  when: install_tmux['changed'] and install_tpm['changed']
